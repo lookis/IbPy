@@ -16,6 +16,7 @@ import socket
 import struct
 import sys
 
+
 def toTypeName(value):
     return '%s%s' % (value[0].upper(), value[1:])
 
@@ -36,6 +37,7 @@ class classmethod_(classmethod):
     """ Classmethod that provides attribute delegation.
 
     """
+
     def __init__(self, func):
         classmethod.__init__(self, func)
         self.func = func
@@ -68,6 +70,7 @@ class Boolean(object):
     """ Partial implementation of Java Boolean type.
 
     """
+
     def __init__(self, value):
         """ Constructor.
 
@@ -101,6 +104,7 @@ class Cloneable(object):
     interface, but its methods are never used.  We provide this class
     for sub typing, and will implement methods as needed later.
     """
+
     def clone(self):
         return copy.copy(self)
 
@@ -109,6 +113,7 @@ class DataInputStream(object):
     """ Partial implementation of the Java DataInputStream type.
 
     """
+
     def __init__(self, stream):
         """ Constructor.
 
@@ -129,6 +134,7 @@ class DataOutputStream(object):
     """ Partial implementation of the Java DataOutputStream type
 
     """
+
     def __init__(self, stream):
         """ Constructor.
 
@@ -207,6 +213,7 @@ class Socket(socket.socket):
     """ Partial implementation of the Java Socket type.
 
     """
+
     def __init__(self, host, port):
         """ Constructor; attempts connection immediately.
 
@@ -227,7 +234,7 @@ class Socket(socket.socket):
 
         """
         return self
-    
+
     def disconnect(self):
         self.shutdown(socket.SHUT_RDWR)
         self.close()
@@ -238,7 +245,7 @@ class Socket(socket.socket):
             return True
         except (socket.error, ), ex:
             return False
-        
+
 
 class StringBuffer(list):
     """ Partial implementation of the Java StringBuffer type
@@ -246,12 +253,13 @@ class StringBuffer(list):
     Translated code uses instances of this type to build up strings.
     The list base type provides the append method.
     """
-    def __str__(self, join=str.join, chr=chr):
+
+    def __str__(self):
         """ the string value of this instance
 
         @return string from characters contained in this instance
         """
-        return join('', [chr(v) for v in self])
+        return bytearray([v for v in self]).decode()
 
 
 if 'qt' in sys.modules:
@@ -261,6 +269,7 @@ if 'qt' in sys.modules:
         """ Partial implementation of Java Thread type, based on Qt3 QThread.
 
         """
+
         def __init__(self, name):
             """ Constructor.
 
@@ -296,7 +305,6 @@ if 'qt' in sys.modules:
             """
 
 
-
 elif 'PyQt4' in sys.modules:
     from PyQt4.QtCore import QThread
 
@@ -304,6 +312,7 @@ elif 'PyQt4' in sys.modules:
         """ Partial implementation of Java Thread type, based on Qt4 QThread.
 
         """
+
         def __init__(self, name):
             """ Constructor.
 
@@ -347,6 +356,7 @@ else:
         """ Partial implementation of Java Thread type, based on Python Thread.
 
         """
+
         def __init__(self, name):
             """ Constructor.
 
@@ -373,6 +383,7 @@ class Thread(ThreadType):
     """ Thread parent type, based on available framework
 
     """
+
     def __init__(self, name, parent, dis):
         """ Constructor.
 
@@ -381,7 +392,6 @@ class Thread(ThreadType):
         @param dis ignored
         """
         ThreadType.__init__(self, name=name)
-
 
     def term(self):
         def isInterrupted():
