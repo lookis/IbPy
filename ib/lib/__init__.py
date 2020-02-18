@@ -127,7 +127,7 @@ class DataInputStream(object):
 
         @return string read from stream
         """
-        return unpack('!b', self.recv(1))[0]
+        return unpack('!B', self.recv(1))[0]
 
 
 class DataOutputStream(object):
@@ -254,12 +254,12 @@ class StringBuffer(list):
     The list base type provides the append method.
     """
 
-    def __str__(self):
+    def __str__(self, join=str.join, chr=chr):
         """ the string value of this instance
 
         @return string from characters contained in this instance
         """
-        return bytearray([v for v in self]).decode()
+        return join('', [chr(v) for v in self])
 
 
 if 'qt' in sys.modules:
